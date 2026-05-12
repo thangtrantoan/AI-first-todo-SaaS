@@ -1,3 +1,6 @@
+import hashlib
+import hmac
+import secrets
 from datetime import datetime, timedelta, timezone
 
 from jose import JWTError, jwt
@@ -7,6 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.models.user import User
+
+OTP_TTL_MINUTES = 15
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -53,3 +58,28 @@ async def create_user(db: AsyncSession, email: str, password: str) -> User:
     await db.commit()
     await db.refresh(user)
     return user
+
+
+def _generate_otp() -> str:
+    return "".join(secrets.choice("0123456789") for _ in range(6))
+
+
+def _hash_otp(code: str) -> str:
+    return hashlib.sha256(code.encode()).hexdigest()
+
+
+def verify_otp(code: str, hashed: str) -> bool:
+    return hmac.compare_digest(_hash_otp(code), hashed)
+
+
+async def issue_otp(db: AsyncSession, user: User) -> str:
+    code = _generate_otp()
+    user.otp_code = _hash_otp(code)
+    user.otp_expires_at = datetime.now(timezone.utc) + timedelta(minutes=OTP_TTL_MINUTES)
+    await db.commit()
+    return code
+
+
+def send_otp_email(email: str, code: str) -> None:
+    # Replace with real email delivery when SMTP/SendGrid is configured.
+    print(f"[OTP] {email} → {code}")
