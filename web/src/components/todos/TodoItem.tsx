@@ -99,10 +99,10 @@ export function TodoItem({ todo }: Props) {
               className="flex-1"
               autoFocus
             />
-            <Button size="sm" loading={savingId} onClick={handleSave} className="px-3">
+            <Button loading={savingId} onClick={handleSave} className="px-3">
               Save
             </Button>
-            <Button size="sm" variant="ghost" onClick={() => setEditing(false)} className="px-3">
+            <Button variant="ghost" onClick={() => setEditing(false)} className="px-3">
               Cancel
             </Button>
           </div>

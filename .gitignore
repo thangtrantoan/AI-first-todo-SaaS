@@ -20,6 +20,9 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Claude Code — contains secrets
+.claude/settings.json
+
 # Alembic
 api/alembic/versions/*.py
 !api/alembic/versions/.gitkeep

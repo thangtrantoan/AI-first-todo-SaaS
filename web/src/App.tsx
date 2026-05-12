@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { Navbar } from "@/components/layout/Navbar";
+import { ForgotPasswordPage } from "@/pages/ForgotPasswordPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
 import { TodosPage } from "@/pages/TodosPage";
@@ -41,6 +42,14 @@ export default function App() {
           element={
             <GuestRoute>
               <RegisterPage />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <GuestRoute>
+              <ForgotPasswordPage />
             </GuestRoute>
           }
         />
