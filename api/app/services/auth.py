@@ -16,10 +16,7 @@ OTP_TTL_MINUTES = 15
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-pwd_context = CryptContext(
-    schemes=["argon2"],
-    deprecated="auto"
-)
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 
 def validate_password(password: str):
@@ -41,7 +38,9 @@ def verify_password(plain: str, hashed: str) -> bool:
 
 
 def create_access_token(user_id: int) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
     return jwt.encode(
         {"sub": str(user_id), "exp": expire},
         settings.SECRET_KEY,
@@ -51,7 +50,9 @@ def create_access_token(user_id: int) -> str:
 
 def decode_token(token: str) -> int | None:
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         user_id = payload.get("sub")
         return int(user_id) if user_id else None
     except JWTError:
@@ -91,7 +92,9 @@ def verify_otp(code: str, hashed: str) -> bool:
 async def issue_otp(db: AsyncSession, user: User) -> str:
     code = _generate_otp()
     user.otp_code = _hash_otp(code)
-    user.otp_expires_at = datetime.now(timezone.utc) + timedelta(minutes=OTP_TTL_MINUTES)
+    user.otp_expires_at = datetime.now(timezone.utc) + timedelta(
+        minutes=OTP_TTL_MINUTES
+    )
     await db.commit()
     return code
 

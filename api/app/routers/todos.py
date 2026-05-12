@@ -36,7 +36,9 @@ async def update(
 ):
     todo = await get_todo(db, todo_id, current_user.id)
     if not todo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found"
+        )
     return await update_todo(db, todo, payload)
 
 
@@ -48,5 +50,7 @@ async def delete(
 ):
     todo = await get_todo(db, todo_id, current_user.id)
     if not todo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found"
+        )
     await delete_todo(db, todo)
