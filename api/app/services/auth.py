@@ -16,7 +16,23 @@ OTP_TTL_MINUTES = 15
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+pwd_context = CryptContext(
+    schemes=["argon2"],
+    deprecated="auto"
+)
+
+
+def validate_password(password: str):
+    if len(password) < 8:
+        raise ValueError("Password must be at least 8 characters")
+
+    # tránh bug bcrypt kiểu cũ
+    if len(password.encode("utf-8")) > 1024:
+        raise ValueError("Password too long")
+
+
 def hash_password(password: str) -> str:
+    validate_password(password)
     return pwd_context.hash(password)
 
 

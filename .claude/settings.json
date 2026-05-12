@@ -1,4 +1,18 @@
 {
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"PostToolUse\", \"additionalContext\": \"File edited. Self-check before continuing: any security issues? pattern-consistent? edge cases covered? Run /review when all changes are done.\"}}'",
+            "statusMessage": "Self-review nudge..."
+          }
+        ]
+      }
+    ]
+  },
   "mcpServers": {
     "github": {
       "command": "npx",
